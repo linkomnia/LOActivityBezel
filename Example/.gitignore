@@ -1,0 +1,23 @@
+# General
+*.swp
+*.swo
+*.rbo
+*.gem
+.DS_Store
+.rbenv-version
+.rbx/
+xcuserdata
+project.xcworkspace
+DerivedData
+/concatenated.*
+
+# Yardoc
+.yardoc
+/doc
+
+# CocoaPods
+/Podfile.lock
+/Pods
+
+*.xccheckout
+.watsonrc
