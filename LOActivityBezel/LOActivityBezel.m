@@ -100,6 +100,7 @@ static const CGFloat LOActivityBezelLabelHeight = 20.f;
 
 @interface LOActivityBezel ()
 @property (nonatomic, strong) UIWindow *window;
+@property (nonatomic, assign) BOOL presented;
 @end
 
 @implementation LOActivityBezel
@@ -120,6 +121,8 @@ static const CGFloat LOActivityBezelLabelHeight = 20.f;
 
 - (void)presentWithMessage:(NSString *)message
 {
+    _presented = YES;
+
     LOActivityBezelViewController *vc;
     if (_window == nil) {
         _window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -127,6 +130,7 @@ static const CGFloat LOActivityBezelLabelHeight = 20.f;
         _window.rootViewController = vc;
     } else {
         vc = (LOActivityBezelViewController *)_window.rootViewController;
+        [vc.view.layer removeAllAnimations];
     }
     [vc setMessage:message];
 
@@ -141,17 +145,21 @@ static const CGFloat LOActivityBezelLabelHeight = 20.f;
     _window.windowLevel = 1.f;
     _window.opaque = NO;
     _window.hidden = NO;
+    _window.rootViewController.view.alpha = 1.f;
 }
 
 - (void)dismiss
 {
+    _presented = NO;
     [UIView animateWithDuration:0.25f
                      animations:^{
                          self.window.rootViewController.view.alpha = 0.0f;
                      }
                      completion:^(BOOL finished) {
-                         self.window.hidden = YES;
-                         self.window = nil;
+                         if (!_presented) {
+                             self.window.hidden = YES;
+                             self.window = nil;
+                         }
                      }];
 }
 
